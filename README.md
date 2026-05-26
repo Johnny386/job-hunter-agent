@@ -17,26 +17,18 @@ writes a cover letter, and drafts a LinkedIn outreach message — all in under 6
 6. **Exports** professional PDFs for resume and cover letter
 
 ## Architecture
-User pastes URL
+URL Input → Scrape Node → Score Node → Router
 │
-┌───▼───┐
-│ Scrape │  Playwright — renders JS pages
-└───┬───┘
+┌───────────────┼───────────────┐
+│               │               │
+score ≥ 70     score 40-69     score < 40
+│               │               │
+Write Materials   Ask User         Skip
+│               │
+└───────┬───────┘
 │
-┌───▼───┐
-│ Score  │  Claude API — fit score, strengths, gaps
-└───┬───┘
-│
-┌───▼──────────┐
-│ Route by score│  ≥70 → generate │ 40-69 → ask user │ <40 → skip
-└───┬──────────┘
-│
-┌───▼───┐
-│ Write  │  Claude API — resume, cover letter, outreach
-└───┬───┘
-│
-┌───▼───┐
-│ Track  │  SQLite + PDF export
+Save to Tracker
+(SQLite + PDF)
 └───────┘
 
 
