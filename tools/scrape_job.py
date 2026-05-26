@@ -4,12 +4,17 @@ import os
 def scrape_job(url: str) -> dict:
     try:
         with sync_playwright() as p:
-            # Use system chromium on cloud, default on local
-            chromium_path = "/usr/bin/chromium-browser" if os.path.exists("/usr/bin/chromium-browser") else None
+            # Debian uses /usr/bin/chromium not chromium-browser
+            chromium_path = None
+            for path in ["/usr/bin/chromium", "/usr/bin/chromium-browser"]:
+                if os.path.exists(path):
+                    chromium_path = path
+                    break
 
             browser = p.chromium.launch(
                 headless=True,
-                executable_path=chromium_path
+                executable_path=chromium_path,
+                args=["--no-sandbox", "--disable-dev-shm-usage"]
             )
             page = browser.new_page()
 
@@ -27,13 +32,7 @@ def scrape_job(url: str) -> dict:
 
             browser.close()
 
-            return {
-                "raw_text": clean_text,
-                "error": None
-            }
+            return {"raw_text": clean_text, "error": None}
 
     except Exception as e:
-        return {
-            "raw_text": None,
-            "error": str(e)
-        }
+        return {"raw_text": None, "error": str(e)}
