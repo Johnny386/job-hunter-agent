@@ -79,15 +79,17 @@ python -m streamlit run ui/app.py
 ```
 
 ## Project Structure
-job-hunter-agent/
-├── nodes/          # LangGraph nodes (scrape, score, route, write, track)
-├── tools/          # Underlying tool logic (LLM calls, scraping, PDF)
-├── memory/         # State schema (JobHunterState)
-├── data/           # master_resume.md + jobs.db (auto-created)
-├── output/         # Generated PDFs (auto-created, gitignored)
-├── ui/             # Streamlit interface
-├── graph.py        # LangGraph graph definition
-└── main.py         # CLI entry point
+
+| Folder/File | Purpose |
+|---|---|
+| `nodes/` | LangGraph nodes — scrape, score, router, writer, tracker |
+| `tools/` | Underlying logic — LLM calls, scraping, PDF generation |
+| `memory/state.py` | JobHunterState TypedDict — shared state across all nodes |
+| `data/` | `master_resume.md` (yours) + `jobs.db` (auto-created) |
+| `output/` | Generated PDFs (auto-created, gitignored) |
+| `ui/app.py` | Streamlit interface |
+| `graph.py` | LangGraph graph definition — wires all nodes together |
+| `main.py` | CLI entry point |
 
 
 ## Roadmap
